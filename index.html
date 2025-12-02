@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Delete Firebase</title>
+</head>
+<body>
+  <input id="txt" placeholder="Nhập nội dung">
+  <button onclick="send()">Gửi</button>
+
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, remove }
+      from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // 🔴 thay config Firebase của bạn
+    const firebaseConfig = {
+  apiKey: "AIzaSyBr3rKT-fDNQc-rz84k6haRMs_WfXoU6kI",
+  authDomain: "mail-9c51f.firebaseapp.com",
+  databaseURL: "https://mail-9c51f-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mail-9c51f",
+  storageBucket: "mail-9c51f.firebasestorage.app",
+  messagingSenderId: "240185286356",
+  appId: "1:240185286356:web:a9273c909ae18e36b86541",
+  measurementId: "G-0XHQ657PH8"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const dbRef = ref(db, "autoDelete");
+
+    // Ghi dữ liệu
+    window.send = () => {
+      const value = txt.value;
+      if (value) {
+        push(dbRef, value);
+        txt.value = "";
+      }
+    };
+
+    // 🚀 Có dữ liệu → XÓA NGAY LẬP TỨC
+    onChildAdded(dbRef, (snap) => {
+      remove(snap.ref);
+    });
+  </script>
+</body>
+</html>
